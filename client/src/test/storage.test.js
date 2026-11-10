@@ -65,3 +65,4 @@ describe('Storage Utils', () => {
     expect(scenarios).toEqual([]);
   });
 });
+

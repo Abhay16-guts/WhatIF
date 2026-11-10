@@ -216,3 +216,4 @@ Provide a grounded, detailed speculative answer exploring how this specific real
 }
 
 export const geminiService = new GeminiService();
+

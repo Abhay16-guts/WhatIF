@@ -67,3 +67,4 @@ export default function GenerationStatus({ promptText, onCancel }) {
     </div>
   );
 }
+

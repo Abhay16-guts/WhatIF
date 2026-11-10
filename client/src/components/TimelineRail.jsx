@@ -50,3 +50,4 @@ export default function TimelineRail({ timeline = [] }) {
     </section>
   );
 }
+

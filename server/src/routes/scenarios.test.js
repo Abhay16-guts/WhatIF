@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import express from 'express';
 import { scenarioRouter } from './scenarios.js';
 import { errorHandler } from '../middleware/errorHandler.js';
+import { config } from '../config.js';
 
 function createTestApp() {
   const app = express();
@@ -75,6 +76,9 @@ describe('Scenario Routes', () => {
   });
 
   test('POST /generate returns MISSING_API_KEY if server has no GEMINI_API_KEY', async () => {
+    const originalKey = config.geminiApiKey;
+    config.geminiApiKey = ''; // Simulate missing key
+
     const app = createTestApp();
     const server = app.listen(0);
     const port = server.address().port;
@@ -86,13 +90,14 @@ describe('Scenario Routes', () => {
         body: JSON.stringify({ prompt: 'What if humans never needed sleep?' }),
       });
 
-      // Since server/.env currently has no real GEMINI_API_KEY set, it should return 503 MISSING_API_KEY
       assert.equal(res.status, 503);
       const data = await res.json();
       assert.equal(data.error.code, 'MISSING_API_KEY');
       assert.ok(data.error.message.includes('API key'));
     } finally {
+      config.geminiApiKey = originalKey; // Restore key
       server.close();
     }
   });
 });
+

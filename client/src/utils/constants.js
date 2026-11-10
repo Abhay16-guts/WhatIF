@@ -5,3 +5,4 @@ export const SAMPLE_PROMPTS = [
   "What if Earth had two moons?",
   "What if trees could communicate through human speech?",
 ];
+
