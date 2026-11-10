@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Compass, Sparkles, Sliders, Clock, ArrowRight } from 'lucide-react';
+import { Compass, Sparkles, Sliders, Clock, ArrowRight, AlertCircle } from 'lucide-react';
 import GenerationStatus from '../components/GenerationStatus';
 import { SAMPLE_PROMPTS } from '../components/HomeHero';
 import { useToast } from '../context/ToastContext';
 import { saveScenario } from '../utils/storage';
+import { generateScenarioApi } from '../utils/api';
 import { MOCK_SCENARIOS } from '../utils/mockData';
 
 const TONE_OPTIONS = [
@@ -29,6 +30,7 @@ export default function Create() {
   const [tone, setTone] = useState('Thoughtful');
   const [timelineScale, setTimelineScale] = useState('50');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,31 +46,52 @@ export default function Create() {
     }
 
     setIsGenerating(true);
+    setErrorMessage(null);
 
     try {
-      // For Phase 3, we simulate generation using realistic mock generator with user parameters
-      await new Promise((resolve) => setTimeout(resolve, 4000));
+      let scenario;
+      try {
+        // Attempt live Gemini synthesis via backend
+        scenario = await generateScenarioApi({
+          prompt: cleanPrompt,
+          tone,
+          timelineScale,
+        });
+      } catch (apiErr) {
+        // If API key is missing or server is unreachable, provide a graceful development fallback
+        if (apiErr.code === 'MISSING_API_KEY' || apiErr.code === 'NETWORK_ERROR') {
+          console.warn('Backend returned:', apiErr.message, '— utilizing local archetype synthesis.');
+          await new Promise((resolve) => setTimeout(resolve, 3000));
 
-      const matchedMock = MOCK_SCENARIOS.find((s) =>
-        s.prompt.toLowerCase().includes(cleanPrompt.toLowerCase().slice(0, 15))
-      ) || MOCK_SCENARIOS[0];
+          const matched = MOCK_SCENARIOS.find((s) =>
+            s.prompt.toLowerCase().includes(cleanPrompt.toLowerCase().slice(0, 15))
+          ) || MOCK_SCENARIOS[0];
 
-      const newScenario = {
-        ...matchedMock,
-        id: `scenario-${Date.now()}`,
-        prompt: cleanPrompt,
-        tone,
-        timelineScale,
-        createdAt: new Date().toISOString(),
-      };
+          scenario = {
+            ...matched,
+            id: `scenario-${Date.now()}`,
+            prompt: cleanPrompt,
+            tone,
+            timelineScale,
+            createdAt: new Date().toISOString(),
+          };
 
-      // Save to localStorage automatically on creation
-      saveScenario(newScenario);
+          if (apiErr.code === 'MISSING_API_KEY') {
+            toast.info('Synthesized using Atlas template. (Add GEMINI_API_KEY in server/.env for live AI generation)');
+          }
+        } else {
+          throw apiErr;
+        }
+      }
+
+      // Automatically save to local history
+      saveScenario(scenario);
       toast.success('Alternate reality established!');
-      navigate(`/scenario/${newScenario.id}`, { state: { scenario: newScenario } });
+      navigate(`/scenario/${scenario.id}`, { state: { scenario } });
     } catch (err) {
-      console.error('Generation error:', err);
-      toast.error('Failed to generate scenario. Please try again.');
+      console.error('Generation failure:', err);
+      setErrorMessage(err.message || 'Failed to synthesize scenario. Please verify your connection.');
+      toast.error(err.message || 'Generation failed.');
       setIsGenerating(false);
     }
   };
@@ -98,6 +121,17 @@ export default function Create() {
             causal fallout across institutions, culture, technology, and individual experience.
           </p>
         </div>
+
+        {/* Error notification banner if any */}
+        {errorMessage && (
+          <div className="mb-6 p-4 rounded-lg bg-error/10 border border-error/20 flex items-start gap-3 text-sm text-ink">
+            <AlertCircle className="w-5 h-5 text-error shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="font-semibold text-error mb-1">Inquiry Generation Notice</p>
+              <p className="text-xs text-ink-muted leading-relaxed">{errorMessage}</p>
+            </div>
+          </div>
+        )}
 
         {/* Composer Form */}
         <form onSubmit={handleSubmit} className="space-y-8">

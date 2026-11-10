@@ -8,6 +8,7 @@ import ImpactGrid from '../components/ImpactGrid';
 import StoryPanel from '../components/StoryPanel';
 import FollowUpComposer from '../components/FollowUpComposer';
 import { getSavedScenarios, saveScenario, removeScenario, isScenarioSaved } from '../utils/storage';
+import { askFollowUpApi } from '../utils/api';
 import { MOCK_SCENARIOS } from '../utils/mockData';
 import { useToast } from '../context/ToastContext';
 
@@ -159,6 +160,17 @@ export default function ScenarioDetail() {
             title: scenario.title,
             premise: scenario.premise,
             timeline: scenario.timeline,
+          }}
+          onAskFollowUp={async (question, scenarioContext) => {
+            try {
+              const res = await askFollowUpApi({ question, scenarioContext });
+              return res.answer;
+            } catch (err) {
+              if (err.code === 'MISSING_API_KEY' || err.code === 'NETWORK_ERROR') {
+                return `In this alternate reality, ${question.toLowerCase().replace(/\?$/, '')} resolved through the established institutional and physical mechanisms outlined in the premise. The community mobilized civic councils and adapted logistical protocols to maintain stability. (Add GEMINI_API_KEY in server/.env for live dynamic Q&A)`;
+              }
+              throw err;
+            }
           }}
         />
 
