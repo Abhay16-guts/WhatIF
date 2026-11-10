@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Compass, Sparkles, Sliders, Clock, ArrowRight, AlertCircle } from 'lucide-react';
 import GenerationStatus from '../components/GenerationStatus';
-import { SAMPLE_PROMPTS } from '../components/HomeHero';
+import { SAMPLE_PROMPTS } from '../utils/constants';
 import { useToast } from '../context/ToastContext';
 import { saveScenario } from '../utils/storage';
 import { generateScenarioApi } from '../utils/api';
