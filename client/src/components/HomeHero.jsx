@@ -1,14 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Compass, Sparkles, ArrowRight } from 'lucide-react';
-
-export const SAMPLE_PROMPTS = [
-  "What if humans never needed sleep?",
-  "What if the Library of Alexandria never burned?",
-  "What if electricity was discovered in 200 BC?",
-  "What if Earth had two moons?",
-  "What if trees could communicate through human speech?",
-];
+import { SAMPLE_PROMPTS } from '../utils/constants';
 
 export default function HomeHero() {
   const [prompt, setPrompt] = useState('');

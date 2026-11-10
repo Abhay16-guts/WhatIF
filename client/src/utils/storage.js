@@ -15,7 +15,7 @@ function isLocalStorageAvailable() {
     window.localStorage.setItem(testKey, testKey);
     window.localStorage.removeItem(testKey);
     return true;
-  } catch (_e) {
+  } catch {
     return false;
   }
 }

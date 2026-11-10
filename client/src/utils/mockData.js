@@ -2,6 +2,46 @@
  * Mock data for scenarios to test pages, history, comparison and interaction flows.
  */
 
+export const SAMPLE_SCENARIO_DATA = {
+  id: 'sample-awake-era',
+  title: 'The Great Vigil: The Century Without Slumber',
+  tagline: 'When human biochemistry evolved past the circadian necessity of sleep.',
+  premise: 'In 2042, an atmospheric catalyst permanently altered the adenosine feedback loop in Homo sapiens. Within six months, the requirement for biological sleep vanished entirely, giving every person eight extra waking hours every single day.',
+  assumptions: [
+    'Cellular repair occurs passively through micro-rests during regular wakefulness.',
+    'Cognitive fatigue is managed by caloric intake rather than unconscious rest.',
+    'Brain neuroplasticity remains stable without REM cycles.',
+  ],
+  timeline: [
+    {
+      yearLabel: 'Year 1 (2042)',
+      eventTitle: 'The 24-Hour Grid Shift',
+      description: 'Global power consumption surges 34%. Residential real estate redesigns remove bedrooms in favor of private studios and secondary workshops.',
+    },
+    {
+      yearLabel: 'Year 10 (2052)',
+      eventTitle: 'The Tri-Career Paradigm',
+      description: 'The standard working day fractures. Adults routinely master two independent professions simultaneously, doubling scientific publication rates.',
+    },
+    {
+      yearLabel: 'Year 50 (2092)',
+      eventTitle: 'The Great Cultural Deceleration',
+      description: 'With 33% more lifespan-hours, the hurry of modern life evaporates. Books lengthen, symphonies expand to twelve hours, and generational wisdom deepens.',
+    },
+  ],
+  impacts: {
+    society: 'The concept of nightlife ceases to exist; cities operate at continuous steady-state vibrancy without curfews.',
+    economy: 'Output triples over two decades, but labor unions successfully mandate 16-hour weekly leisure quotas.',
+    technology: 'Personal computing interfaces adapt to non-stop cognitive flow, creating adaptive brainwave modulation screens.',
+    environment: 'Light pollution doubles, forcing subterranean observatories and bio-luminescent city street canopies.',
+    culture: 'Sleep is romanticized as an ancient mystical trance; simulated sleep parlors become luxury retreats.',
+  },
+  story: {
+    title: 'The 4 A.M. Tea Merchant',
+    body: 'Maren set the brass kettle down over the induction coil as the chime struck 04:00. Fifty years ago, she was told, this street was bathed in quiet darkness, shuttered behind drawn blinds. Tonight, poets and structural architects sat at her terrace tables arguing over tensile bridge calculations under the gentle amber glow of street lanterns. "To think our ancestors spent a third of life behind closed eyelids," an old professor murmured. Maren poured the steeped mint tea and smiled. In the eternal morning, there was finally time for everything.',
+  },
+};
+
 export const MOCK_SCENARIOS = [
   {
     id: 'scenario-humans-never-slept',

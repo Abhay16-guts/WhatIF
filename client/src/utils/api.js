@@ -41,7 +41,7 @@ async function request(endpoint, options = {}, timeoutMs = DEFAULT_TIMEOUT_MS) {
     const text = await res.text();
     try {
       data = text ? JSON.parse(text) : {};
-    } catch (_err) {
+    } catch {
       data = { raw: text };
     }
 

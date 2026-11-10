@@ -19,7 +19,7 @@ export default function ScenarioHeader({
         await navigator.clipboard.writeText(window.location.href);
         toast.success('Scenario URL copied to clipboard');
       }
-    } catch (_err) {
+    } catch {
       toast.info('Share via address bar');
     }
   };
